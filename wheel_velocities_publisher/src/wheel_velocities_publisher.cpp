@@ -1,8 +1,10 @@
 #include "rclcpp/executors/multi_threaded_executor.hpp"
+#include "rclcpp/executors/single_threaded_executor.hpp"
 #include "rclcpp/logging.hpp"
 #include "rclcpp/node.hpp"
 #include "rclcpp/publisher.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp/timer.hpp"
 #include "rclcpp/utilities.hpp"
 #include "rcutils/logging.h"
 #include "std_msgs/msg/detail/float32_multi_array__struct.hpp"
@@ -25,7 +27,8 @@ public:
         wheel_vel_pub_ = this->create_publisher<VelArray>("/wheel_speed", 10);
         RCLCPP_INFO(this->get_logger(),"Initialized wheel velocities publisher node");
         //call sequence movement
-        this->move_sequence();
+        timer_ = this->create_wall_timer(500ms, std::bind(&WheelVelocityPub::move_sequence,this));    
+    
     }
 
     void move_forward(float vel){
@@ -87,22 +90,23 @@ public:
     void move_sequence(){
     
         //move forward
-        this->move_forward(1.0);
+        this->move_forward(0.3);
         std::this_thread::sleep_for(3s);        
         //move backward
-        this->move_backward(1.0);
+        this->move_backward(0.3);
         std::this_thread::sleep_for(3s);
         //move sideway to the left
-        this->move_sideway("left", 1.0);
+        this->move_sideway("left", 0.3);
         std::this_thread::sleep_for(3s);
         //move sideway to the right
-        this->move_sideway("right", 1.0);
+        this->move_sideway("right", 0.3);
         std::this_thread::sleep_for(3s);
         //turn cw
-        this->turn("cw", 1.0);
+        this->turn("cw", 0.3);
         std::this_thread::sleep_for(3s);
         //turn ccw
-        this->turn("ccw", 1.0);
+        this->turn("ccw", 0.3);
+        std::this_thread::sleep_for(3s);
         //stop
         this->stop();
     }
@@ -110,18 +114,7 @@ public:
 private:
     rclcpp::Publisher<VelArray>::SharedPtr wheel_vel_pub_;
     VelArray wheel_vel_msg;
-
-};
-
-class KinematicModel : public rclcpp::Node{
-
-public:
-    KinematicModel() : Node("kinematic_model") {
-    
-    
-    }
-
-private:
+    rclcpp::TimerBase::SharedPtr timer_;
 
 };
 
@@ -130,11 +123,9 @@ int main(int argc, char** argv){
 
     rclcpp::init(argc, argv);
     auto wheel_velocities_node = std::make_shared<WheelVelocityPub>();
-    auto kinematic_model_node = std::make_shared<KinematicModel>();
-
-    rclcpp::executors::MultiThreadedExecutor executor;
+    
+    rclcpp::executors::SingleThreadedExecutor executor;
     executor.add_node(wheel_velocities_node);
-    executor.add_node(kinematic_model_node);
     executor.spin();
 
     rclcpp::shutdown();
