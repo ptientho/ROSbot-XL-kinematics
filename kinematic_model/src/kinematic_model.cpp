@@ -29,30 +29,31 @@ public:
 
     TF = {{static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH),
            1, -1},
-          {
-              static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH),
-              1,
-          },
+          {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1,
+           1},
           {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1,
            -1},
           {static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH),
            1, 1}};
 
-    inverseTF = pinv(TF);
+    inverseTF = pinv(TF / WHEEL_RADIUS);
     std::cout << "TF matrix:\n" << inverseTF << std::endl;
     // publish to /cmd_vel topic
-    twist_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+    twist_pub_ =
+        this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
     // subscribe to /wheel_speed topic
-    wheel_vel_sub_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-        "/wheel_speed", 10,
-        std::bind(&KinematicModel::wheel_vel_callback, this,
-                  std::placeholders::_1));
+    wheel_vel_sub_ =
+        this->create_subscription<std_msgs::msg::Float32MultiArray>(
+            "/wheel_speed", 10,
+            std::bind(&KinematicModel::wheel_vel_callback, this,
+                      std::placeholders::_1));
 
     RCLCPP_INFO(this->get_logger(), "Constructor Initialized");
   }
 
 private:
-  rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr wheel_vel_sub_;
+  rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr
+      wheel_vel_sub_;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_pub_;
   geometry_msgs::msg::Twist twist_msg;
   float WHEEL_BASE_DISTANCE; // 2L
@@ -61,7 +62,8 @@ private:
   fmat TF;
   fmat inverseTF;
 
-  void wheel_vel_callback(const std_msgs::msg::Float32MultiArray::SharedPtr msg) {
+  void
+  wheel_vel_callback(const std_msgs::msg::Float32MultiArray::SharedPtr msg) {
 
     // get wheel velocities
     std::vector<float> wheel_vels = msg->data;
