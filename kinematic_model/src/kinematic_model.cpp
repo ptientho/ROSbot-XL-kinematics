@@ -27,14 +27,10 @@ public:
     TRACK_WIDTH = 0.269;
     WHEEL_RADIUS = 0.050;
 
-    TF = {{static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH),
-           1, -1},
-          {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1,
-           1},
-          {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1,
-           -1},
-          {static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH),
-           1, 1}};
+    TF = {{static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH),1.0, -1.0},
+          {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1.0, 1.0},
+          {static_cast<float>(0.5 * WHEEL_BASE_DISTANCE + 0.5 * TRACK_WIDTH), 1.0, -1.0},
+          {static_cast<float>(-0.5 * WHEEL_BASE_DISTANCE - 0.5 * TRACK_WIDTH), 1.0, 1.0}};
 
     inverseTF = pinv(TF / WHEEL_RADIUS);
     std::cout << "TF matrix:\n" << inverseTF << std::endl;
@@ -68,10 +64,10 @@ private:
     // get wheel velocities
     std::vector<float> wheel_vels = msg->data;
     Col<float> u(wheel_vels.data(), wheel_vels.size());
-    std::cout << "U vector: \n" << u << std::endl;
+    //std::cout << "U vector: \n" << u << std::endl;
     // calculate the dot product of wheel velocities and inverse of TF matrix
     Col<float> v = inverseTF * u;
-    std::cout << "V vector: \n" << v << std::endl;
+    //std::cout << "V vector: \n" << v << std::endl;
     float omega = v(0);
     float vx = v(1);
     float vy = v(2);
