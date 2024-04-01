@@ -30,13 +30,15 @@ ros2 launch kinematic_model kinematic_model.launch.py
 ```
 The robot will execute each motion in order.
 
-// gif, showing the execution
+![test_movement](https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/test_movement.gif)
 
 ## Robot Following Waypoints
 Given the multiple waypoints in [dphi, dx, dy] format, the robot will follow the predefined waypoints in the absolute frame.
 
 ### Implementation
 // picture showing node relations
+
+<img src=https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/eight_trajectory_waypoints.png width=400px/>
 
 Use the following command to run the simulation.
 ```
