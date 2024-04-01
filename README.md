@@ -22,7 +22,7 @@ Develop the holonomic motions of the robot. These motion includes
   - turn counter-clockwise
 
 ### Implementation
-![implementation1](https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/implementation1.jpg)
+![node_design1](https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/implementation1.jpg)
 
 To run these motions, use the below command.
 ```
@@ -36,7 +36,7 @@ The robot will execute each motion in order.
 Given the multiple waypoints in [dphi, dx, dy] format, the robot will follow the predefined waypoints in the absolute frame.
 
 ### Implementation
-// picture showing node relations
+![node_design2](https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/implementation2.jpg)
 
 <img src=https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/eight_trajectory_waypoints.png width=400px/>
 
