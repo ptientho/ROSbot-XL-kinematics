@@ -44,6 +44,3 @@ Use the following command to run the simulation.
 ```
 ros2 launch eight_trajectory eight_trajectory.launch.py
 ```
-
-// gif showing the execution
-
