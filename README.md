@@ -22,7 +22,7 @@ Develop the holonomic motions of the robot. These motion includes
   - turn counter-clockwise
 
 ### Implementation
-// picture showing node relations
+![implementation1](https://github.com/ptientho/ROSbot-XL-kinematics/blob/main/implementation1.jpg)
 
 To run these motions, use the below command.
 ```
